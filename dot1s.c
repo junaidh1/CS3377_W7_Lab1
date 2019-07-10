@@ -20,7 +20,7 @@ typedef struct
   double      *a;
   double      *b;
   double     sum; 
-  int    veclen; 
+  int     veclen; 
 } DOTDATA;
 
 // int VECLEN = 1000000;
@@ -81,7 +81,9 @@ int i,len;
 double *a, *b;
    
 /* Assign storage and initialize values */
-len = VECLEN;
+if (argc < 2) { len = VECLEN; }
+else { len = atoi(argv[1]); }
+  
 a = (double*) malloc (len*sizeof(double));
 b = (double*) malloc (len*sizeof(double));
   
