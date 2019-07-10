@@ -113,7 +113,12 @@ int main (int argc, char *argv[])
 //
 int NUMTHRDS = 10;
 int VECLEN = 100000;
-pthread_t callThd[NUMTHRDS];
+int numthrds, veclen;
+
+// Code added to run ./dotm 10 100000
+if (argc < 3) { numthrds=NUMTHRDS; veclen=VECLEN; }
+else { numthrds=atoi(argv[1]); veclen=atoi(argv[2]); } 
+pthread_t callThd[numthrds];
 
 long i;
 double *a, *b;
@@ -122,15 +127,15 @@ pthread_attr_t attr;
 
 /* Assign storage and initialize values */
 
-a = (double*) malloc (NUMTHRDS*VECLEN*sizeof(double));
-b = (double*) malloc (NUMTHRDS*VECLEN*sizeof(double));
+a = (double*) malloc (numthrds*veclen*sizeof(double));
+b = (double*) malloc (numthrds*veclen*sizeof(double));
   
-for (i=0; i<VECLEN*NUMTHRDS; i++) {
+for (i=0; i<veclen*numthrds; i++) {
   a[i]=1;
   b[i]=a[i];
   }
 
-dotstr.veclen = VECLEN; 
+dotstr.veclen = veclen; 
 dotstr.a = a; 
 dotstr.b = b; 
 dotstr.sum=0;
@@ -141,7 +146,7 @@ pthread_mutex_init(&mutexsum, NULL);
 pthread_attr_init(&attr);
 pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
 
-for(i=0;i<NUMTHRDS;i++)
+for(i=0;i<numthrds;i++)
   {
   /* Each thread works on a different set of data.
    * The offset is specified by 'i'. The size of
@@ -153,7 +158,7 @@ for(i=0;i<NUMTHRDS;i++)
 pthread_attr_destroy(&attr);
 /* Wait on the other threads */
 
-for(i=0;i<NUMTHRDS;i++) {
+for(i=0;i<numthrds;i++) {
   pthread_join(callThd[i], &status);
   }
 /* After joining, print out the results and cleanup */

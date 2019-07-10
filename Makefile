@@ -1,11 +1,11 @@
-all:	
+all:	dot1s.c dot1m.c
 	gcc dot1s.c -o dot1s
 	gcc dot1m.c -o dot1m -lpthread
 
-dots1:	dots1.c
+dot1s:	dot1s.c
 	gcc dot1s.c -o dot1s
 
-dotm1:	dotm1.c
+dot1m:	dot1m.c
 	gcc dot1m.c -o dot1m -lpthread
 
 clean:
